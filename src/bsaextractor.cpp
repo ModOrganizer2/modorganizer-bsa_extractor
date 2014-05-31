@@ -80,7 +80,7 @@ void BsaExtractor::modInstalledHandler(const QString &modName)
 
     foreach (QFileInfo archiveInfo, archives) {
       BSA::Archive archive;
-      BSA::EErrorCode result = archive.read(archiveInfo.absoluteFilePath().toLocal8Bit().constData());
+      BSA::EErrorCode result = archive.read(archiveInfo.absoluteFilePath().toLocal8Bit().constData(), true);
       if ((result != BSA::ERROR_NONE) && (result != BSA::ERROR_INVALIDHASHES)) {
         reportError(tr("failed to read %1: %2").arg(archiveInfo.fileName()).arg(result));
         return;
