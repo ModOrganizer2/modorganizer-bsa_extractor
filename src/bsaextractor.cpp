@@ -68,6 +68,10 @@ bool BsaExtractor::extractProgress(QProgressDialog &progress, int percentage, st
 
 void BsaExtractor::modInstalledHandler(const QString &modName)
 {
+  if (!isActive()) {
+    return;
+  }
+
   IModInterface *mod = m_Organizer->getMod(modName);
   QDir dir(mod->absolutePath());
 
