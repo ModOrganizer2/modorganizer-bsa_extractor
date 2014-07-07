@@ -7,14 +7,10 @@
 TARGET = bsaExtractor
 TEMPLATE = lib
 
-contains(QT_VERSION, "^5.*") {
-  QT += widgets
-}
-
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += plugins
 CONFIG += dll
-
 
 DEFINES += BSAEXTRACTOR_LIBRARY
 
@@ -22,16 +18,17 @@ SOURCES += bsaextractor.cpp
 
 HEADERS += bsaextractor.h
 
+OTHER_FILES += \
+    bsaextractor.json
+
 include(../plugin_template.pri)
 
 INCLUDEPATH += ../../bsatk "$(BOOSTPATH)"
 
 CONFIG(debug, debug|release) {
-    LIBS += -L"$(BOOSTPATH)/stage/lib" -L$$OUT_PWD/../../bsatk/debug -lbsatk
+  LIBS += -L"$(BOOSTPATH)/stage/lib" -L$$OUT_PWD/../../bsatk/debug -lbsatk
 } else {
-    LIBS += -L"$(BOOSTPATH)/stage/lib" -L$$OUT_PWD/../../bsatk/release -lbsatk
+  LIBS += -L"$(BOOSTPATH)/stage/lib" -L$$OUT_PWD/../../bsatk/release -lbsatk
 }
 
 LIBS += -L"$(ZLIBPATH)/build" -lzlibstatic
-OTHER_FILES += \
-    bsaextractor.json
