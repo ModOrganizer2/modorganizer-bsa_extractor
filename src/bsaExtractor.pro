@@ -26,7 +26,12 @@ include(../plugin_template.pri)
 
 INCLUDEPATH += ../../bsatk "$(BOOSTPATH)"
 
-LIBS += -L"$(BOOSTPATH)/stage/lib" -L$$OUT_PWD/../../bsatk/release -lbsatk
+CONFIG(debug, debug|release) {
+    LIBS += -L"$(BOOSTPATH)/stage/lib" -L$$OUT_PWD/../../bsatk/debug -lbsatk
+} else {
+    LIBS += -L"$(BOOSTPATH)/stage/lib" -L$$OUT_PWD/../../bsatk/release -lbsatk
+}
+
 LIBS += -L"$(ZLIBPATH)/build" -lzlibstatic
 OTHER_FILES += \
     bsaextractor.json
