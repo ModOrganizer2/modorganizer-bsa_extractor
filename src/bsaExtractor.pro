@@ -19,6 +19,7 @@ SOURCES += bsaextractor.cpp
 HEADERS += bsaextractor.h
 
 OTHER_FILES += \
+    bsaextractor.json \
     bsaextractor.json
 
 include(../plugin_template.pri)

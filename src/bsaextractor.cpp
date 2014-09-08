@@ -12,6 +12,7 @@
 #include <boost/bind.hpp>
 
 using namespace MOBase;
+namespace bindph = std::placeholders;
 
 
 BsaExtractor::BsaExtractor()
@@ -21,7 +22,7 @@ BsaExtractor::BsaExtractor()
 bool BsaExtractor::init(MOBase::IOrganizer *moInfo)
 {
   m_Organizer = moInfo;
-  moInfo->onModInstalled(std::bind(&BsaExtractor::modInstalledHandler, this, std::placeholders::_1));
+  moInfo->onModInstalled(std::bind(&BsaExtractor::modInstalledHandler, this, bindph::_1));
   return true;
 }
 
@@ -66,7 +67,7 @@ bool BsaExtractor::extractProgress(QProgressDialog &progress, int percentage, st
 }
 
 
-void BsaExtractor::modInstalledHandler(const QString &modName)
+void BsaExtractor::modInstalledHandler(const QString &modName/*, EFileCategory installerCategory*/)
 {
   if (!isActive()) {
     return;
