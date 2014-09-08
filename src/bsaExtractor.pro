@@ -19,6 +19,7 @@ SOURCES += bsaextractor.cpp
 HEADERS += bsaextractor.h
 
 OTHER_FILES += \
+    bsaextractor.json \
     bsaextractor.json
 
 include(../plugin_template.pri)
@@ -32,9 +33,9 @@ CONFIG(debug, debug|release) {
 }
 
 
-INCLUDEPATH += ../../bsatk "$(BOOSTPATH)"
+INCLUDEPATH += ../../bsatk "$${BOOSTPATH}"
 
-LIBS += -L"$(BOOSTPATH)/stage/lib" -lbsatk
-LIBS += -L"$(ZLIBPATH)/build" -lzlibstatic
+LIBS += -L"$${BOOSTPATH}/stage/lib" -lbsatk
+LIBS += -L"$${ZLIBPATH}/build" -lzlibstatic
 OTHER_FILES += \
     bsaextractor.json
