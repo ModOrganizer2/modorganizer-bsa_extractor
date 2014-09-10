@@ -74,6 +74,12 @@ void BsaExtractor::modInstalledHandler(const QString &modName/*, EFileCategory i
   }
 
   IModInterface *mod = m_Organizer->getMod(modName);
+  if (QFileInfo(mod->absolutePath()) == QFileInfo(m_Organizer->gameInfo().path() + "/data")) {
+    QMessageBox::information(NULL, tr("invalid mod name"),
+                             tr("BSA extraction doesn't work on mods that have the same name as a non-MO mod."
+                                "Please remove the mod then reinstall with a different name."));
+    return;
+  }
   QDir dir(mod->absolutePath());
 
   QFileInfoList archives = dir.entryInfoList(QStringList("*.bsa"));
