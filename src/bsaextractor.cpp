@@ -7,6 +7,7 @@
 #include <QDir>
 #include <QFileInfoList>
 #include <QCoreApplication>
+#include <QMessageBox>
 #include <QtPlugin>
 #include <functional>
 #include <boost/bind.hpp>
@@ -16,6 +17,7 @@ namespace bindph = std::placeholders;
 
 
 BsaExtractor::BsaExtractor()
+  : m_Organizer(NULL)
 {
 }
 
