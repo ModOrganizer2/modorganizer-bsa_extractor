@@ -17,7 +17,7 @@ namespace bindph = std::placeholders;
 
 
 BsaExtractor::BsaExtractor()
-  : m_Organizer(NULL)
+  : m_Organizer(nullptr)
 {
 }
 
@@ -77,7 +77,7 @@ void BsaExtractor::modInstalledHandler(const QString &modName/*, EFileCategory i
 
   IModInterface *mod = m_Organizer->getMod(modName);
   if (QFileInfo(mod->absolutePath()) == QFileInfo(m_Organizer->gameInfo().path() + "/data")) {
-    QMessageBox::information(NULL, tr("invalid mod name"),
+    QMessageBox::information(nullptr, tr("invalid mod name"),
                              tr("BSA extraction doesn't work on mods that have the same name as a non-MO mod."
                                 "Please remove the mod then reinstall with a different name."));
     return;
@@ -86,7 +86,7 @@ void BsaExtractor::modInstalledHandler(const QString &modName/*, EFileCategory i
 
   QFileInfoList archives = dir.entryInfoList(QStringList("*.bsa"));
   if (archives.length() != 0 &&
-      (QuestionBoxMemory::query(NULL, "unpackBSA", tr("Extract BSA"),
+      (QuestionBoxMemory::query(nullptr, "unpackBSA", tr("Extract BSA"),
                              tr("This mod contains at least one BSA. Do you want to unpack it?\n"
                                 "(This removes the BSA after completion. If you don't know about BSAs, just select no)"),
                              QDialogButtonBox::Yes | QDialogButtonBox::No, QDialogButtonBox::No) == QDialogButtonBox::Yes)) {
@@ -99,7 +99,7 @@ void BsaExtractor::modInstalledHandler(const QString &modName/*, EFileCategory i
         return;
       }
 
-      QProgressDialog progress(NULL);
+      QProgressDialog progress(nullptr);
       progress.setMaximum(100);
       progress.setValue(0);
       progress.show();
