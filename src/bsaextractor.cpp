@@ -1,6 +1,7 @@
 #include "bsaextractor.h"
 #include <versioninfo.h>
 #include <imodinterface.h>
+#include <igameinfo.h>
 #include <questionboxmemory.h>
 #include <bsaarchive.h>
 #include <report.h>

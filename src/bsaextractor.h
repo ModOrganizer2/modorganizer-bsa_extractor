@@ -4,7 +4,7 @@
 #include <iplugin.h>
 #include <QProgressDialog>
 
-class BsaExtractor : public QObject, MOBase::IPlugin
+class BsaExtractor : public QObject, public MOBase::IPlugin
 {
   Q_OBJECT
   Q_INTERFACES(MOBase::IPlugin)
