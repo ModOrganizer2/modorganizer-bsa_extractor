@@ -34,4 +34,10 @@ CONFIG(debug, debug|release) {
   PRE_TARGETDEPS +=  $$OUT_PWD/../../bsatk/release/bsatk.lib
 }
 
+
+INCLUDEPATH += ../../bsatk "$${BOOSTPATH}"
+
+LIBS += -L"$${BOOSTPATH}/stage/lib" -lbsatk
 LIBS += -L"$${ZLIBPATH}/build" -lzlibstatic
+OTHER_FILES += \
+    bsaextractor.json
