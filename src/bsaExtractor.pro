@@ -24,14 +24,14 @@ OTHER_FILES += \
 
 include(../plugin_template.pri)
 
-INCLUDEPATH += ../../bsatk "$(BOOSTPATH)"
+INCLUDEPATH += ../../bsatk "$${BOOSTPATH}"
 
 CONFIG(debug, debug|release) {
-  LIBS += -L"$(BOOSTPATH)/stage/lib" -L$$OUT_PWD/../../bsatk/debug -lbsatk
+  LIBS += -L"$${BOOSTPATH}/stage/lib" -L$$OUT_PWD/../../bsatk/debug -lbsatk
   PRE_TARGETDEPS +=  $$OUT_PWD/../../bsatk/debug/bsatk.lib
 } else {
-  LIBS += -L"$(BOOSTPATH)/stage/lib" -L$$OUT_PWD/../../bsatk/release -lbsatk
+  LIBS += -L"$${BOOSTPATH}/stage/lib" -L$$OUT_PWD/../../bsatk/release -lbsatk
   PRE_TARGETDEPS +=  $$OUT_PWD/../../bsatk/release/bsatk.lib
 }
 
-LIBS += -L"$(ZLIBPATH)/build" -lzlibstatic
+LIBS += -L"$${ZLIBPATH}/build" -lzlibstatic
