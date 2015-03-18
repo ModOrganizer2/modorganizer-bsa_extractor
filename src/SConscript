@@ -2,30 +2,13 @@ Import('qt_env')
 
 env = qt_env.Clone()
 
-modules = [
-    'Core',
-    'Gui'
-]
-
-if env['QT_MAJOR_VERSION'] > 4:
-    modules += [ 'Widgets' ]
-
-env.EnableQt4Modules(['Qt' + n for n in modules],
-                     debug = env['CONFIG'] == 'debug')
-
 env.AppendUnique(CPPDEFINES = [ 'BSAEXTRACTOR_LIBRARY' ])
 
-env.RequireLibraries('uibase', 'bsatk')
+env.RequireLibraries('bsatk')
 
 env.AppendUnique(CPPPATH = [
     '${BOOSTPATH}'
 ])
 
 lib = env.SharedLibrary('bsaExtractor', env.Glob('*.cpp'))
-env.InstallPlugin(lib)
-
-"""
-LIBS += -L"$${ZLIBPATH}/build" -lzlibstatic
-
-Deal with JSON files on QT5 (all plugins)
-"""
+env.InstallModule(lib)
