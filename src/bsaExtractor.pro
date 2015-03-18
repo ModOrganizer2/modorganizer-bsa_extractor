@@ -20,7 +20,7 @@ HEADERS += bsaextractor.h
 
 OTHER_FILES += \
     bsaextractor.json \
-    bsaextractor.json
+    SConscript
 
 include(../plugin_template.pri)
 
