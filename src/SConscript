@@ -10,5 +10,11 @@ env.AppendUnique(CPPPATH = [
     '${BOOSTPATH}'
 ])
 
+env.AppendUnique(LIBPATH = "${ZLIBPATH}/build")
+env.AppendUnique(LIBS = 'zlibstatic')
+
 lib = env.SharedLibrary('bsaExtractor', env.Glob('*.cpp'))
 env.InstallModule(lib)
+
+res = env['QT_USED_MODULES']
+Return('res')
