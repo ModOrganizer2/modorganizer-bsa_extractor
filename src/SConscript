@@ -1,0 +1,14 @@
+Import('qt_env')
+
+env = qt_env.Clone()
+
+env.AppendUnique(CPPDEFINES = [ 'BSAEXTRACTOR_LIBRARY' ])
+
+env.RequireLibraries('bsatk')
+
+env.AppendUnique(CPPPATH = [
+    '${BOOSTPATH}'
+])
+
+lib = env.SharedLibrary('bsaExtractor', env.Glob('*.cpp'))
+env.InstallModule(lib)
