@@ -2,6 +2,8 @@ Import('qt_env')
 
 env = qt_env.Clone()
 
+env.AddExtraMoc(env.Glob('*.h'))
+
 env.AppendUnique(CPPDEFINES = [ 'BSAEXTRACTOR_LIBRARY' ])
 
 env.RequireLibraries('bsatk')
