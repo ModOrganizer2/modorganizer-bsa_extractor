@@ -1,10 +1,13 @@
 #include "bsaextractor.h"
+
+#include "iplugingame.h"
 #include <versioninfo.h>
 #include <imodinterface.h>
 #include <igameinfo.h>
 #include <questionboxmemory.h>
 #include <bsaarchive.h>
 #include <report.h>
+
 #include <QDir>
 #include <QFileInfoList>
 #include <QCoreApplication>
@@ -77,7 +80,7 @@ void BsaExtractor::modInstalledHandler(const QString &modName/*, EFileCategory i
   }
 
   IModInterface *mod = m_Organizer->getMod(modName);
-  if (QFileInfo(mod->absolutePath()) == QFileInfo(m_Organizer->gameInfo().path() + "/data")) {
+  if (QFileInfo(mod->absolutePath()) == QFileInfo(m_Organizer->managedGame()->dataDirectory().absolutePath())) {
     QMessageBox::information(nullptr, tr("invalid mod name"),
                              tr("BSA extraction doesn't work on mods that have the same name as a non-MO mod."
                                 "Please remove the mod then reinstall with a different name."));
