@@ -3,7 +3,6 @@
 #include "iplugingame.h"
 #include <versioninfo.h>
 #include <imodinterface.h>
-#include <igameinfo.h>
 #include <questionboxmemory.h>
 #include <bsaarchive.h>
 #include <report.h>
@@ -13,7 +12,9 @@
 #include <QCoreApplication>
 #include <QMessageBox>
 #include <QtPlugin>
+
 #include <functional>
+
 #include <boost/bind.hpp>
 
 using namespace MOBase;
