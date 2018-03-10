@@ -32,7 +32,7 @@ SET(lib_path "${project_path}/../../install/libs")
 INCLUDE_DIRECTORIES(${project_path}/uibase/src
                     ${project_path}/bsatk/src)
 LINK_DIRECTORIES(${lib_path}
-                 ${project_path}/../zlib/lib
+                 ${ZLIB_ROOT}/lib
                  ${project_path}/uibase/build/src)
 
 
