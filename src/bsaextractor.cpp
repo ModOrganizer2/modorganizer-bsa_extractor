@@ -89,7 +89,7 @@ void BsaExtractor::modInstalledHandler(const QString &modName/*, EFileCategory i
   }
   QDir dir(mod->absolutePath());
 
-  QFileInfoList archives = dir.entryInfoList(QStringList("*.bsa"));
+  QFileInfoList archives = dir.entryInfoList(QStringList({ "*.bsa", "*.ba2" }));
   if (archives.length() != 0 &&
       (QuestionBoxMemory::query(nullptr, "unpackBSA", tr("Extract BSA"),
                              tr("This mod contains at least one BSA. Do you want to unpack it?\n"
