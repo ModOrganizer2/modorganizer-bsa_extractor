@@ -1,4 +1,4 @@
-CMAKE_MINIMUM_REQUIRED (VERSION 2.8)
+CMAKE_MINIMUM_REQUIRED (VERSION 2.8.11)
 
 CMAKE_POLICY(SET CMP0020 NEW)
 CMAKE_POLICY(SET CMP0043 NEW)
@@ -30,10 +30,12 @@ SET(project_path "${default_project_path}" CACHE PATH "path to the other mo proj
 SET(lib_path "${project_path}/../../install/libs")
 
 INCLUDE_DIRECTORIES(${project_path}/uibase/src
-                    ${project_path}/bsatk/src)
+                    ${project_path}/bsatk/src
+                    ${LZ4_ROOT}/include)
 LINK_DIRECTORIES(${lib_path}
                  ${ZLIB_ROOT}/lib
-                 ${project_path}/uibase/build/src)
+                 ${project_path}/uibase/build/src
+                 ${LZ4_ROOT}/dll)
 
 
 ADD_LIBRARY(${PROJ_NAME} SHARED ${${PROJ_NAME}_HDRS} ${${PROJ_NAME}_SRCS} ${${PROJ_NAME}_UIHDRS} ${${PROJ_NAME}_translations_qm})
@@ -42,7 +44,8 @@ TARGET_LINK_LIBRARIES(${PROJ_NAME}
                       ${Boost_LIBRARIES}
                       zlibstatic
                       bsatk
-                      uibase)
+                      uibase
+                      liblz4)
 
 IF(MSVC)
   SET_TARGET_PROPERTIES(${PROJ_NAME} PROPERTIES LINK_FLAGS "/LARGEADDRESSAWARE")
@@ -57,11 +60,10 @@ IF (NOT "${OPTIMIZE_LINK_FLAGS}" STREQUAL "")
   SET_TARGET_PROPERTIES(${PROJ_NAME} PROPERTIES LINK_FLAGS_RELWITHDEBINFO ${OPTIMIZE_LINK_FLAGS})
 ENDIF()
 
-QT5_USE_MODULES(${PROJ_NAME} Widgets)
-
 ###############
 ## Installation
 
 INSTALL(TARGETS ${PROJ_NAME}
         RUNTIME DESTINATION bin/plugins)
-INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJ_NAME}.pdb DESTINATION pdb)
+INSTALL(FILES $<TARGET_PDB_FILE:${PROJ_NAME}>
+        DESTINATION pdb)
