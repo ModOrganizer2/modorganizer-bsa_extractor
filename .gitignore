@@ -1,6 +1,5 @@
-build
-std*.log
-CMakeLists.txt.user
 edit
-build
-vsbuild
+CMakeLists.txt.user
+/msbuild.log
+/*std*.log
+/*build
