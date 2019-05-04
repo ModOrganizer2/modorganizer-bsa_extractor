@@ -1,6 +1,7 @@
 #include "bsaextractor.h"
 
 #include "iplugingame.h"
+#include "imodlist.h"
 #include <versioninfo.h>
 #include <imodinterface.h>
 #include <questionboxmemory.h>
@@ -50,7 +51,7 @@ QString BsaExtractor::description() const
 
 VersionInfo BsaExtractor::version() const
 {
-  return VersionInfo(1, 0, 0, VersionInfo::RELEASE_FINAL);
+  return VersionInfo(1, 1, 0, VersionInfo::RELEASE_FINAL);
 }
 
 bool BsaExtractor::isActive() const
@@ -60,8 +61,10 @@ bool BsaExtractor::isActive() const
 
 QList<PluginSetting> BsaExtractor::settings() const
 {
-  return QList<PluginSetting>() << PluginSetting("enabled", "enable bsa extraction (you can still choose to not extract during installation)", false);
-      ;// << PluginSetting("always", "always unpack all bsas without asking", false);
+  return QList<PluginSetting>() 
+      << PluginSetting("enabled", "enable bsa extraction (you can still choose to not extract during installation)", false)
+      << PluginSetting("only_alternate_source", "only trigger bsa extraction for alternate game sources", false)
+      ;
 }
 
 
@@ -74,12 +77,17 @@ bool BsaExtractor::extractProgress(QProgressDialog &progress, int percentage, st
 }
 
 
-void BsaExtractor::modInstalledHandler(const QString &modName/*, EFileCategory installerCategory*/)
+void BsaExtractor::modInstalledHandler(const QString &modName)
 {
   if (!isActive()) {
     return;
   }
 
+  if (m_Organizer->pluginSetting(name(), "only_alternate_source").toBool() && 
+      !(m_Organizer->modList()->state(modName) & IModList::STATE_ALTERNATE)) {
+    return;
+  }
+  
   IModInterface *mod = m_Organizer->getMod(modName);
   if (QFileInfo(mod->absolutePath()) == QFileInfo(m_Organizer->managedGame()->dataDirectory().absolutePath())) {
     QMessageBox::information(nullptr, tr("invalid mod name"),
