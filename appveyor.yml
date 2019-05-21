@@ -15,11 +15,11 @@ build_script:
 
     C:\Python37-x64\python.exe unimake.py -d c:\projects\modorganizer-build -s Appveyor_Build=True %APPVEYOR_PROJECT_NAME%
 artifacts:
-- path: ..\..\..\install\bin\plugins\bsa_extractor.dll
+- path: build\src\bsa_extractor.dll
   name: bsa_extractor_dll
-- path: ..\..\..\install\pdb\bsa_extractor.pdb
+- path: build\src\bsa_extractor.pdb
   name: bsa_extractor_pdb
-- path: ..\..\..\install\libs\bsa_extractor.lib
+- path: build\src\bsa_extractor.lib
   name: bsa_extractor_lib
 on_success:
   - ps: Set-Location -Path $env:APPVEYOR_BUILD_FOLDER
