@@ -32,11 +32,11 @@ SET(lib_path "${project_path}/../../install/libs")
 
 INCLUDE_DIRECTORIES(${project_path}/uibase/src
                     ${project_path}/bsatk/src
-                    ${LZ4_ROOT}/include)
+                    ${LZ4_ROOT}/lib)
 LINK_DIRECTORIES(${lib_path}
                  ${ZLIB_ROOT}/lib
                  ${project_path}/uibase/build/src
-                 ${LZ4_ROOT}/dll)
+                 ${LZ4_ROOT}/bin)
 
 
 ADD_LIBRARY(${PROJ_NAME} SHARED ${${PROJ_NAME}_HDRS} ${${PROJ_NAME}_SRCS} ${${PROJ_NAME}_UIHDRS} ${${PROJ_NAME}_translations_qm})
