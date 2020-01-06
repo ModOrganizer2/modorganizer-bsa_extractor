@@ -1,6 +1,6 @@
 version: 1.0.{build}
 skip_branch_with_pr: true
-image: Visual Studio 2019 Preview
+image: Visual Studio 2019
 environment:
   APPVEYOR:
   WEBHOOK_URL:
