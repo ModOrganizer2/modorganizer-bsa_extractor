@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 project(bsa_extractor)
-set(project_type dll)
+set(project_type plugin)
 set(enable_warnings OFF)
 
 include(../cmake_common/project.cmake)
