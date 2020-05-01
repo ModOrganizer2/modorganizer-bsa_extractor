@@ -9,4 +9,5 @@ if(DEFINED DEPENDENCIES_DIR)
 else()
 	include(../cmake_common/project.cmake)
 endif()
+
 add_subdirectory(src)
