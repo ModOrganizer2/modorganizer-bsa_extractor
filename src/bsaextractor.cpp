@@ -101,9 +101,12 @@ void BsaExtractor::modInstalledHandler(const QString &modName)
   if (archives.length() != 0 &&
       (QuestionBoxMemory::query(nullptr, "unpackBSA", tr("Extract BSA"),
                              tr("This mod contains at least one BSA. Do you want to unpack it?\n"
-                                "(This removes the BSA after completion. If you don't know about BSAs, just select no)"),
+                                "(If you don't know about BSAs, just select no)"),
                              QDialogButtonBox::Yes | QDialogButtonBox::No, QDialogButtonBox::No) == QDialogButtonBox::Yes)) {
 
+    bool removeBSAs = (QuestionBoxMemory::query(nullptr, "removeUnpackedBSA", tr("Remove extracted archives"),
+                       tr("Do you wish to remove BSAs after extraction completed?\n"),
+                       QDialogButtonBox::Yes | QDialogButtonBox::No, QDialogButtonBox::No) == QDialogButtonBox::Yes);
     foreach (QFileInfo archiveInfo, archives) {
       BSA::Archive archive;
       BSA::EErrorCode result = archive.read(archiveInfo.absoluteFilePath().toLocal8Bit().constData(), true);
@@ -127,8 +130,10 @@ void BsaExtractor::modInstalledHandler(const QString &modName)
 
       archive.close();
 
-      if (!QFile::remove(archiveInfo.absoluteFilePath())) {
-        qCritical("failed to remove archive %s", archiveInfo.absoluteFilePath().toUtf8().constData());
+      if (removeBSAs) {
+        if (!QFile::remove(archiveInfo.absoluteFilePath())) {
+          qCritical("failed to remove archive %s", archiveInfo.absoluteFilePath().toUtf8().constData());
+        }
       }
     }
   }
