@@ -30,7 +30,7 @@ BsaExtractor::BsaExtractor()
 bool BsaExtractor::init(MOBase::IOrganizer *moInfo)
 {
   m_Organizer = moInfo;
-  moInfo->onModInstalled(std::bind(&BsaExtractor::modInstalledHandler, this, bindph::_1));
+  moInfo->modList()->onModInstalled(std::bind(&BsaExtractor::modInstalledHandler, this, bindph::_1));
   return true;
 }
 
@@ -77,18 +77,17 @@ bool BsaExtractor::extractProgress(QProgressDialog &progress, int percentage, st
 }
 
 
-void BsaExtractor::modInstalledHandler(const QString &modName)
+void BsaExtractor::modInstalledHandler(IModInterface *mod)
 {
   if (!isActive()) {
     return;
   }
 
   if (m_Organizer->pluginSetting(name(), "only_alternate_source").toBool() && 
-      !(m_Organizer->modList()->state(modName) & IModList::STATE_ALTERNATE)) {
+      !(m_Organizer->modList()->state(mod->name()) & IModList::STATE_ALTERNATE)) {
     return;
   }
   
-  IModInterface *mod = m_Organizer->getMod(modName);
   if (QFileInfo(mod->absolutePath()) == QFileInfo(m_Organizer->managedGame()->dataDirectory().absolutePath())) {
     QMessageBox::information(nullptr, tr("invalid mod name"),
                              tr("BSA extraction doesn't work on mods that have the same name as a non-MO mod."
