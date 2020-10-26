@@ -24,7 +24,7 @@ public:
   virtual QList<MOBase::PluginSetting> settings() const;
 
 private:
-  void modInstalledHandler(const QString &modName);
+  void modInstalledHandler(MOBase::IModInterface *mod);
   bool extractProgress(QProgressDialog &progress, int percentage, std::string fileName);
 private:
   MOBase::IOrganizer *m_Organizer;
