@@ -39,6 +39,12 @@ QString BsaExtractor::name() const
   return "BSA Extractor";
 }
 
+QString BsaExtractor::localizedName() const
+{
+  return tr("BSA Extractor");
+}
+
+
 QString BsaExtractor::author() const
 {
   return "Tannin";
@@ -54,17 +60,11 @@ VersionInfo BsaExtractor::version() const
   return VersionInfo(1, 1, 0, VersionInfo::RELEASE_FINAL);
 }
 
-bool BsaExtractor::isActive() const
-{
-  return m_Organizer->pluginSetting(this->name(), "enabled").toBool();
-}
-
 QList<PluginSetting> BsaExtractor::settings() const
 {
-  return QList<PluginSetting>() 
-      << PluginSetting("enabled", "enable bsa extraction (you can still choose to not extract during installation)", false)
-      << PluginSetting("only_alternate_source", "only trigger bsa extraction for alternate game sources", false)
-      ;
+  return {
+    PluginSetting("only_alternate_source", "only trigger bsa extraction for alternate game sources", false)
+  };
 }
 
 
@@ -79,15 +79,12 @@ bool BsaExtractor::extractProgress(QProgressDialog &progress, int percentage, st
 
 void BsaExtractor::modInstalledHandler(IModInterface *mod)
 {
-  if (!isActive()) {
-    return;
-  }
 
-  if (m_Organizer->pluginSetting(name(), "only_alternate_source").toBool() && 
+  if (m_Organizer->pluginSetting(name(), "only_alternate_source").toBool() &&
       !(m_Organizer->modList()->state(mod->name()) & IModList::STATE_ALTERNATE)) {
     return;
   }
-  
+
   if (QFileInfo(mod->absolutePath()) == QFileInfo(m_Organizer->managedGame()->dataDirectory().absolutePath())) {
     QMessageBox::information(nullptr, tr("invalid mod name"),
                              tr("BSA extraction doesn't work on mods that have the same name as a non-MO mod."
