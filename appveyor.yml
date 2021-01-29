@@ -23,11 +23,11 @@ build_script:
     
     if($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode )  }
 artifacts:
-- path: build\src\bsa_extractor.dll
+- path: vsbuild\src\RelWithDebInfo\bsa_extractor.dll
   name: bsa_extractor_dll
-- path: build\src\bsa_extractor.pdb
+- path: vsbuild\src\RelWithDebInfo\bsa_extractor.pdb
   name: bsa_extractor_pdb
-- path: build\src\bsa_extractor.lib
+- path: vsbuild\src\RelWithDebInfo\bsa_extractor.lib
   name: bsa_extractor_lib
 on_success:
   - ps: Set-Location -Path $env:APPVEYOR_BUILD_FOLDER
