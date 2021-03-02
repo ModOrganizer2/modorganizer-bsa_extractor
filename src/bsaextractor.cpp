@@ -57,13 +57,13 @@ QString BsaExtractor::description() const
 
 VersionInfo BsaExtractor::version() const
 {
-  return VersionInfo(1, 1, 0, VersionInfo::RELEASE_FINAL);
+  return VersionInfo(1, 2, 0, VersionInfo::RELEASE_FINAL);
 }
 
 QList<PluginSetting> BsaExtractor::settings() const
 {
   return {
-    PluginSetting("only_alternate_source", "only trigger bsa extraction for alternate game sources", false)
+    PluginSetting("only_alternate_source", "only trigger bsa extraction for alternate game sources", true)
   };
 }
 
