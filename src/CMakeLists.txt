@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
-if(DEFINED DEPENDENCIES_DIR)
-	include(${DEPENDENCIES_DIR}/modorganizer_super/cmake_common/src.cmake)
-else()
-	include(../../cmake_common/src.cmake)
-endif()
-requires_project(bsatk)
+
+add_library(bsa_extractor SHARED)
+mo2_configure_plugin(bsa_extractor
+    WARNINGS OFF
+    PRIVATE_DEPENDS bsatk)
+mo2_install_target(bsa_extractor)
