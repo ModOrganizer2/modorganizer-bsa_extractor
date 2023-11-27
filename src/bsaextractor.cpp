@@ -47,7 +47,7 @@ QString BsaExtractor::localizedName() const
 
 QString BsaExtractor::author() const
 {
-  return "Tannin";
+  return "Tannin & MO2 Team";
 }
 
 QString BsaExtractor::description() const
@@ -57,7 +57,7 @@ QString BsaExtractor::description() const
 
 VersionInfo BsaExtractor::version() const
 {
-  return VersionInfo(1, 2, 0, VersionInfo::RELEASE_FINAL);
+  return VersionInfo(1, 5, 0, VersionInfo::RELEASE_FINAL);
 }
 
 QList<PluginSetting> BsaExtractor::settings() const
