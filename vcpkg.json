@@ -1,0 +1,10 @@
+{
+  "dependencies": [
+    "mo2-cmake",
+    "mo2-dds-header",
+    "boost-thread",
+    "boost-interprocess",
+    "zlib",
+    "lz4"
+  ]
+}
