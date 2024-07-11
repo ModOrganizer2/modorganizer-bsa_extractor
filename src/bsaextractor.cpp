@@ -1,12 +1,13 @@
 #include "bsaextractor.h"
 
-#include "iplugingame.h"
-#include "imodlist.h"
-#include <versioninfo.h>
-#include <imodinterface.h>
-#include <questionboxmemory.h>
-#include <bsaarchive.h>
-#include <report.h>
+#include <uibase/iplugingame.h>
+#include <uibase/imodlist.h>
+#include <uibase/versioninfo.h>
+#include <uibase/imodinterface.h>
+#include <uibase/questionboxmemory.h>
+#include <uibase/report.h>
+
+#include <bsatk/bsaarchive.h>
 
 #include <QDir>
 #include <QFileInfoList>
@@ -16,10 +17,7 @@
 
 #include <functional>
 
-#include <boost/bind.hpp>
-
 using namespace MOBase;
-namespace bindph = std::placeholders;
 
 
 BsaExtractor::BsaExtractor()
@@ -30,7 +28,7 @@ BsaExtractor::BsaExtractor()
 bool BsaExtractor::init(MOBase::IOrganizer *moInfo)
 {
   m_Organizer = moInfo;
-  moInfo->modList()->onModInstalled(std::bind(&BsaExtractor::modInstalledHandler, this, bindph::_1));
+  moInfo->modList()->onModInstalled([this](auto* mod) { modInstalledHandler(mod); });
   return true;
 }
 
@@ -117,7 +115,9 @@ void BsaExtractor::modInstalledHandler(IModInterface *mod)
       progress.show();
 
       archive.extractAll(mod->absolutePath().toLocal8Bit().constData(),
-                         boost::bind(&BsaExtractor::extractProgress, this, boost::ref(progress), _1, _2),
+                         [this, &progress](int value, std::string filename) {
+                          return extractProgress(progress, value, filename);
+                         },
                          false);
 
       if (result == BSA::ERROR_INVALIDHASHES) {
