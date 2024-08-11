@@ -1,0 +1,31 @@
+{
+  "id": "mo2-bsa-extractor",
+  "name": "BSA Extractor",
+  "version": "1.6.0",
+  "description": "Extension to offer a dialog during installation of a mod to unpack all its BSAs.",
+  "author": {
+    "name": "Mod Organizer 2",
+    "homepage": "https://www.modorganizer.org/"
+  },
+  "contributors": [
+    "AL",
+    "Holt59",
+    "isanae",
+    "LePresidente",
+    "LostDragonist",
+    "Sandro Jäckel",
+    "Silarn",
+    "Tannin",
+    "TheBloke",
+    "Thomas Tanner"
+  ],
+  "type": "plugin",
+  "content": {
+    "plugins": {
+      "autodetect": true
+    },
+    "translations": {
+      "autodetect": "translations"
+    }
+  }
+}

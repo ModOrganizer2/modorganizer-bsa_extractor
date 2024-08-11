@@ -42,27 +42,10 @@ QString BsaExtractor::localizedName() const
   return tr("BSA Extractor");
 }
 
-
-QString BsaExtractor::author() const
-{
-  return "Tannin & MO2 Team";
-}
-
-QString BsaExtractor::description() const
-{
-  return tr("Offers a dialog during installation of a mod to unpack all its BSAs");
-}
-
-VersionInfo BsaExtractor::version() const
-{
-  return VersionInfo(1, 5, 0, VersionInfo::RELEASE_FINAL);
-}
-
-QList<PluginSetting> BsaExtractor::settings() const
+QList<Setting> BsaExtractor::settings() const
 {
   return {
-    PluginSetting("only_alternate_source", "only trigger bsa extraction for alternate game sources", true)
-  };
+      Setting("only_alternate_source", "Only Alternate Sources", "only trigger bsa extraction for alternate game sources", true)};
 }
 
 
