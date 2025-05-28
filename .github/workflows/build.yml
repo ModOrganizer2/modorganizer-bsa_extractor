@@ -15,6 +15,6 @@ jobs:
     steps:
       - name: Build BSA Extractor
         id: build-bsa-extractor
-        uses: ModOrganizer2/build-with-mob-action@dev/vcpkg
+        uses: ModOrganizer2/build-with-mob-action
         with:
           mo2-dependencies: uibase bsatk
