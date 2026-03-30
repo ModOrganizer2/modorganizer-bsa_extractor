@@ -10,5 +10,7 @@ find_package(Boost CONFIG REQUIRED COMPONENTS thread interprocess)
 
 add_library(bsa_extractor SHARED)
 mo2_configure_plugin(bsa_extractor WARNINGS OFF)
+target_include_directories(bsa_extractor PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(bsa_extractor PRIVATE mo2::uibase mo2::bsatk)
+target_sources(bsa_extractor PRIVATE archivehandlerdispatch.cpp)
 mo2_install_plugin(bsa_extractor)

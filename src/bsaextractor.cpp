@@ -1,4 +1,5 @@
 #include "bsaextractor.h"
+#include "archivehandlerdispatch.h"
 
 #include <uibase/iplugingame.h>
 #include <uibase/imodlist.h>
@@ -18,7 +19,6 @@
 #include <functional>
 
 using namespace MOBase;
-
 
 BsaExtractor::BsaExtractor()
   : m_Organizer(nullptr)
@@ -74,6 +74,59 @@ bool BsaExtractor::extractProgress(QProgressDialog &progress, int percentage, st
   return !progress.wasCanceled();
 }
 
+bool BsaExtractor::extractWithBsaTk(IModInterface* mod, const QFileInfo& archiveInfo)
+{
+  BSA::Archive archive;
+  BSA::EErrorCode result = archive.read(archiveInfo.absoluteFilePath().toLocal8Bit().constData(),
+                                        true);
+  if ((result != BSA::ERROR_NONE) && (result != BSA::ERROR_INVALIDHASHES)) {
+    reportError(tr("failed to read %1: %2").arg(archiveInfo.fileName()).arg(result));
+    return false;
+  }
+
+  QProgressDialog progress(nullptr);
+  progress.setMaximum(100);
+  progress.setValue(0);
+  progress.show();
+
+  archive.extractAll(mod->absolutePath().toLocal8Bit().constData(),
+                     [this, &progress](int value, std::string filename) {
+                       return extractProgress(progress, value, filename);
+                     },
+                     false);
+
+  if (result == BSA::ERROR_INVALIDHASHES) {
+    reportError(tr("This archive contains invalid hashes. Some files may be broken."));
+  }
+
+  archive.close();
+  return true;
+}
+
+bool BsaExtractor::extractWithGameHandler(
+    IModInterface* mod, const QFileInfo& archiveInfo,
+    const std::shared_ptr<const GameArchiveHandler>& archiveHandler)
+{
+  QString errorMessage;
+  QProgressDialog progress(nullptr);
+  progress.setMaximum(100);
+  progress.setValue(0);
+  progress.show();
+
+  const bool extracted = archiveHandler->extractArchive(
+      archiveInfo.absoluteFilePath(), mod->absolutePath(),
+      [this, &progress](int value, const QString& fileName) {
+        return extractProgress(progress, value, fileName.toStdString());
+      },
+      &errorMessage);
+
+  if (!extracted) {
+    reportError(tr("failed to extract %1: %2").arg(archiveInfo.fileName(), errorMessage));
+  }
+
+  return extracted;
+}
+
 
 void BsaExtractor::modInstalledHandler(IModInterface *mod)
 {
@@ -91,7 +144,8 @@ void BsaExtractor::modInstalledHandler(IModInterface *mod)
   }
   QDir dir(mod->absolutePath());
 
-  QFileInfoList archives = dir.entryInfoList(QStringList({ "*.bsa", "*.ba2" }));
+  const auto archiveHandler = findGameArchiveHandler(m_Organizer);
+  QFileInfoList archives    = findExtractableArchives(dir, archiveHandler);
   if (archives.length() != 0 &&
       (QuestionBoxMemory::query(nullptr, "unpackBSA", tr("Extract BSA"),
                              tr("This mod contains at least one BSA. Do you want to unpack it?\n"
@@ -102,29 +156,12 @@ void BsaExtractor::modInstalledHandler(IModInterface *mod)
                        tr("Do you wish to remove BSAs after extraction completed?\n"),
                        QDialogButtonBox::Yes | QDialogButtonBox::No, QDialogButtonBox::No) == QDialogButtonBox::Yes);
     foreach (QFileInfo archiveInfo, archives) {
-      BSA::Archive archive;
-      BSA::EErrorCode result = archive.read(archiveInfo.absoluteFilePath().toLocal8Bit().constData(), true);
-      if ((result != BSA::ERROR_NONE) && (result != BSA::ERROR_INVALIDHASHES)) {
-        reportError(tr("failed to read %1: %2").arg(archiveInfo.fileName()).arg(result));
+      const bool extracted = shouldDelegateArchive(archiveInfo.absoluteFilePath(), archiveHandler)
+                                 ? extractWithGameHandler(mod, archiveInfo, archiveHandler)
+                                 : extractWithBsaTk(mod, archiveInfo);
+      if (!extracted) {
         return;
       }
-
-      QProgressDialog progress(nullptr);
-      progress.setMaximum(100);
-      progress.setValue(0);
-      progress.show();
-
-      archive.extractAll(mod->absolutePath().toLocal8Bit().constData(),
-                         [this, &progress](int value, std::string filename) {
-                          return extractProgress(progress, value, filename);
-                         },
-                         false);
-
-      if (result == BSA::ERROR_INVALIDHASHES) {
-        reportError(tr("This archive contains invalid hashes. Some files may be broken."));
-      }
-
-      archive.close();
 
       if (removeBSAs) {
         if (!QFile::remove(archiveInfo.absoluteFilePath())) {

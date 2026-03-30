@@ -3,6 +3,7 @@
     "mo2-dds-header",
     "boost-thread",
     "boost-interprocess",
+    "gtest",
     "zlib",
     "lz4"
   ],
