@@ -16,6 +16,7 @@
 #include <QMessageBox>
 #include <QtPlugin>
 
+#include <algorithm>
 #include <functional>
 
 using namespace MOBase;
@@ -107,16 +108,21 @@ bool BsaExtractor::extractWithGameHandler(
     IModInterface* mod, const QFileInfo& archiveInfo,
     const std::shared_ptr<const GameArchiveHandler>& archiveHandler)
 {
-  QString errorMessage;
   QProgressDialog progress(nullptr);
+  progress.setLabelText(archiveInfo.fileName());
   progress.setMaximum(100);
   progress.setValue(0);
   progress.show();
 
+  QString errorMessage;
   const bool extracted = archiveHandler->extractArchive(
       archiveInfo.absoluteFilePath(), mod->absolutePath(),
-      [this, &progress](int value, const QString& fileName) {
-        return extractProgress(progress, value, fileName.toStdString());
+      [this, &progress, archiveInfo](qint64 current, qint64 total) {
+        const int percent =
+            (total > 0)
+                ? static_cast<int>(std::clamp((current * 100) / total, qint64(0), qint64(100)))
+                : 0;
+        extractProgress(progress, percent, archiveInfo.fileName().toStdString());
       },
       &errorMessage);
 

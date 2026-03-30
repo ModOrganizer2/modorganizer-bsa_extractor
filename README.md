@@ -18,17 +18,13 @@ This change adds generic game-feature archive dispatch to `bsa_extractor`.
   - unsupported games still behave gracefully because the plugin only acts when it
     finds candidate archives, and non-delegated `.bsa` / `.ba2` files still follow the
     existing bsatk path
-- Temporary shim:
-  - this repo carries only the new local header
-    `src/uibase/game_features/gamearchivehandler.h`
-  - the previous unsafe protected-member access hack was removed
-  - while that shim exists, extractor-side feature lookup is intentionally disabled
-    rather than using unsafe access to `IGameFeatures` internals
-  - upstream `uibase` support is still required before delegated archive handling is
-    fully active in this repo
+- Progress callback:
+  - delegated extraction now follows the canonical `uibase` progress callback
+    `std::function<void(qint64 current, qint64 total)>`
+  - the delegated progress dialog therefore shows archive-level progress instead of
+    per-file names; bsatk extraction keeps its existing filename detail
 
 Companion game-plugin work is still required for any non-bsatk format: the game plugin
 must register `GameArchiveHandler` through MO2 game features.
 
-This extractor branch should land with, or after, the matching `uibase` PR that adds
-the canonical `MOBase::GameArchiveHandler` declaration and feature lookup support.
+This branch now expects the canonical `uibase` `GameArchiveHandler` API to be available.

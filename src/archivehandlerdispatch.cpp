@@ -22,15 +22,7 @@ findGameArchiveHandler(const MOBase::IOrganizer* organizer)
     return {};
   }
 
-#ifdef BSA_EXTRACTOR_LOCAL_GAMEARCHIVEHANDLER_SHIM
-  // The extractor carries a local stopgap declaration of GameArchiveHandler so this
-  // branch can be reviewed in isolation, but clean feature lookup requires the
-  // canonical uibase declaration and IGameFeatures support. Until that lands, behave as
-  // if no handler is registered instead of reaching into protected internals.
-  return {};
-#else
   return organizer->gameFeatures()->gameFeature<MOBase::GameArchiveHandler>();
-#endif
 }
 
 QFileInfoList findExtractableArchives(
