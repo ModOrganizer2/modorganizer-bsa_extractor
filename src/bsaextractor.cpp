@@ -14,7 +14,9 @@
 #include <QFileInfoList>
 #include <QCoreApplication>
 #include <QMessageBox>
+#include <QTimer>
 #include <QtPlugin>
+#include <QtDebug>
 
 #include <algorithm>
 #include <functional>
@@ -29,8 +31,59 @@ BsaExtractor::BsaExtractor()
 bool BsaExtractor::init(MOBase::IOrganizer *moInfo)
 {
   m_Organizer = moInfo;
-  moInfo->modList()->onModInstalled([this](auto* mod) { modInstalledHandler(mod); });
+  if (qEnvironmentVariableIntValue("BSA_EXTRACTOR_DISABLE_INSTALL_HOOK") == 1) {
+    qWarning().noquote() << "[BSA Extractor] install hook disabled by"
+                            " BSA_EXTRACTOR_DISABLE_INSTALL_HOOK=1";
+    return true;
+  }
+
+  // Delay registration a bit to avoid early-startup initialization hazards.
+  QTimer::singleShot(2000, this, [this]() { tryRegisterInstallHook(); });
   return true;
+}
+
+void BsaExtractor::tryRegisterInstallHook()
+{
+  if (m_InstallHookRegistered || m_Organizer == nullptr) {
+    return;
+  }
+
+  auto* modList = m_Organizer->modList();
+  if (modList == nullptr) {
+    qWarning().noquote() << "[BSA Extractor] modList unavailable;"
+                            " extraction hook not registered";
+    return;
+  }
+
+  m_InstallHookRegistered = modList->onModInstalled([this](IModInterface* mod) {
+    if (m_Organizer == nullptr || mod == nullptr) {
+      return;
+    }
+
+    // Bounce to the Qt event loop and resolve by name to avoid stale pointers.
+    const QString modName = mod->name();
+    QMetaObject::invokeMethod(
+        this,
+        [this, modName]() {
+          if (m_Organizer == nullptr) {
+            return;
+          }
+
+          auto* currentModList = m_Organizer->modList();
+          if (currentModList == nullptr) {
+            return;
+          }
+
+          auto* currentMod = currentModList->getMod(modName);
+          if (currentMod != nullptr) {
+            modInstalledHandler(currentMod);
+          }
+        },
+        Qt::QueuedConnection);
+  });
+  if (!m_InstallHookRegistered) {
+    qWarning().noquote() << "[BSA Extractor] failed to register onModInstalled hook";
+  }
 }
 
 QString BsaExtractor::name() const
@@ -136,13 +189,22 @@ bool BsaExtractor::extractWithGameHandler(
 
 void BsaExtractor::modInstalledHandler(IModInterface *mod)
 {
-
-  if (m_Organizer->pluginSetting(name(), "only_alternate_source").toBool() &&
-      !(m_Organizer->modList()->state(mod->name()) & IModList::STATE_ALTERNATE)) {
+  if (m_Organizer == nullptr || mod == nullptr) {
     return;
   }
 
-  if (QFileInfo(mod->absolutePath()) == QFileInfo(m_Organizer->managedGame()->dataDirectory().absolutePath())) {
+  auto* modList = m_Organizer->modList();
+  auto* managedGame = m_Organizer->managedGame();
+  if (modList == nullptr || managedGame == nullptr) {
+    return;
+  }
+
+  if (m_Organizer->pluginSetting(name(), "only_alternate_source").toBool() &&
+      !(modList->state(mod->name()) & IModList::STATE_ALTERNATE)) {
+    return;
+  }
+
+  if (QFileInfo(mod->absolutePath()) == QFileInfo(managedGame->dataDirectory().absolutePath())) {
     QMessageBox::information(nullptr, tr("invalid mod name"),
                              tr("BSA extraction doesn't work on mods that have the same name as a non-MO mod."
                                 "Please remove the mod then reinstall with a different name."));

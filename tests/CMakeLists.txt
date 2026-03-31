@@ -10,6 +10,7 @@ target_include_directories(bsa_extractor-tests
 )
 
 find_package(GTest CONFIG REQUIRED)
+find_package(mo2-uibase CONFIG REQUIRED)
 
 target_link_libraries(bsa_extractor-tests
   PRIVATE

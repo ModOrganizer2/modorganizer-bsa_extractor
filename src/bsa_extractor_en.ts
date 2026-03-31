@@ -4,54 +4,59 @@
 <context>
     <name>BsaExtractor</name>
     <message>
-        <location filename="bsaextractor.cpp" line="42"/>
+        <location filename="bsaextractor.cpp" line="96"/>
         <source>BSA Extractor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="bsaextractor.cpp" line="53"/>
+        <location filename="bsaextractor.cpp" line="107"/>
         <source>Offers a dialog during installation of a mod to unpack all its BSAs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="bsaextractor.cpp" line="87"/>
+        <location filename="bsaextractor.cpp" line="183"/>
+        <source>failed to extract %1: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="bsaextractor.cpp" line="208"/>
         <source>invalid mod name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="bsaextractor.cpp" line="88"/>
+        <location filename="bsaextractor.cpp" line="209"/>
         <source>BSA extraction doesn&apos;t work on mods that have the same name as a non-MO mod.Please remove the mod then reinstall with a different name.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="bsaextractor.cpp" line="96"/>
+        <location filename="bsaextractor.cpp" line="218"/>
         <source>Extract BSA</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="bsaextractor.cpp" line="97"/>
+        <location filename="bsaextractor.cpp" line="219"/>
         <source>This mod contains at least one BSA. Do you want to unpack it?
 (If you don&apos;t know about BSAs, just select no)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="bsaextractor.cpp" line="101"/>
+        <location filename="bsaextractor.cpp" line="223"/>
         <source>Remove extracted archives</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="bsaextractor.cpp" line="102"/>
+        <location filename="bsaextractor.cpp" line="224"/>
         <source>Do you wish to remove BSAs after extraction completed?
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="bsaextractor.cpp" line="108"/>
+        <location filename="bsaextractor.cpp" line="137"/>
         <source>failed to read %1: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="bsaextractor.cpp" line="124"/>
+        <location filename="bsaextractor.cpp" line="153"/>
         <source>This archive contains invalid hashes. Some files may be broken.</source>
         <translation type="unfinished"></translation>
     </message>
