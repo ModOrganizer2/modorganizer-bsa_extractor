@@ -37,6 +37,10 @@ bool BsaExtractor::init(MOBase::IOrganizer *moInfo)
     return true;
   }
 
+  if (!canUseBuiltInArchiveTools(m_Organizer) && !findGameArchiveHandler(m_Organizer)) {
+    return true;
+  }
+
   // Delay registration a bit to avoid early-startup initialization hazards.
   QTimer::singleShot(2000, this, [this]() { tryRegisterInstallHook(); });
   return true;
@@ -212,8 +216,13 @@ void BsaExtractor::modInstalledHandler(IModInterface *mod)
   }
   QDir dir(mod->absolutePath());
 
+  const bool useBuiltInArchiveTools = canUseBuiltInArchiveTools(m_Organizer);
   const auto archiveHandler = findGameArchiveHandler(m_Organizer);
-  QFileInfoList archives    = findExtractableArchives(dir, archiveHandler);
+  if (!useBuiltInArchiveTools && !archiveHandler) {
+    return;
+  }
+
+  QFileInfoList archives = findExtractableArchives(dir, useBuiltInArchiveTools, archiveHandler);
   if (archives.length() != 0 &&
       (QuestionBoxMemory::query(nullptr, "unpackBSA", tr("Extract BSA"),
                              tr("This mod contains at least one BSA. Do you want to unpack it?\n"
@@ -226,7 +235,9 @@ void BsaExtractor::modInstalledHandler(IModInterface *mod)
     foreach (QFileInfo archiveInfo, archives) {
       const bool extracted = shouldDelegateArchive(archiveInfo.absoluteFilePath(), archiveHandler)
                                  ? extractWithGameHandler(mod, archiveInfo, archiveHandler)
-                                 : extractWithBsaTk(mod, archiveInfo);
+                                 : (useBuiltInArchiveTools
+                                        ? extractWithBsaTk(mod, archiveInfo)
+                                        : false);
       if (!extracted) {
         return;
       }

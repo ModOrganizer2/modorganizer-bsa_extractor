@@ -13,11 +13,13 @@ namespace MOBase
 class IOrganizer;
 }
 
+bool canUseBuiltInArchiveTools(const MOBase::IOrganizer* organizer);
+
 std::shared_ptr<const MOBase::GameArchiveHandler>
 findGameArchiveHandler(const MOBase::IOrganizer* organizer);
 
 QFileInfoList findExtractableArchives(
-    const QDir& directory,
+    const QDir& directory, bool includeBuiltInArchives,
     const std::shared_ptr<const MOBase::GameArchiveHandler>& archiveHandler);
 
 bool shouldDelegateArchive(

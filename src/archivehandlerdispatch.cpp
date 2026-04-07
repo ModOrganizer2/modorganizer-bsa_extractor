@@ -2,6 +2,7 @@
 
 #include <QSet>
 
+#include <uibase/game_features/dataarchives.h>
 #include <uibase/game_features/igamefeatures.h>
 #include <uibase/imoinfo.h>
 
@@ -15,6 +16,15 @@ QStringList builtInArchiveNameFilters()
 
 }  // namespace
 
+bool canUseBuiltInArchiveTools(const MOBase::IOrganizer* organizer)
+{
+  if (organizer == nullptr || organizer->gameFeatures() == nullptr) {
+    return false;
+  }
+
+  return organizer->gameFeatures()->gameFeature<MOBase::DataArchives>() != nullptr;
+}
+
 std::shared_ptr<const MOBase::GameArchiveHandler>
 findGameArchiveHandler(const MOBase::IOrganizer* organizer)
 {
@@ -26,12 +36,16 @@ findGameArchiveHandler(const MOBase::IOrganizer* organizer)
 }
 
 QFileInfoList findExtractableArchives(
-    const QDir& directory,
+    const QDir& directory, bool includeBuiltInArchives,
     const std::shared_ptr<const MOBase::GameArchiveHandler>& archiveHandler)
 {
-  QFileInfoList archives = directory.entryInfoList(
-      builtInArchiveNameFilters(), QDir::Files | QDir::NoDotAndDotDot,
-      QDir::Name | QDir::IgnoreCase);
+  QFileInfoList archives;
+
+  if (includeBuiltInArchives) {
+    archives = directory.entryInfoList(
+        builtInArchiveNameFilters(), QDir::Files | QDir::NoDotAndDotDot,
+        QDir::Name | QDir::IgnoreCase);
+  }
 
   if (!archiveHandler) {
     return archives;

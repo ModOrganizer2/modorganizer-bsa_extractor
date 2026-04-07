@@ -50,7 +50,7 @@ TEST(ArchiveHandlerDispatch, FallsBackToBuiltInArchivePatternsWithoutFeature)
   touchFile(QDir(tempDir.path()).filePath("foo.ba2"));
   touchFile(QDir(tempDir.path()).filePath("foo.rsc"));
 
-  const auto archives = findExtractableArchives(QDir(tempDir.path()), {});
+  const auto archives = findExtractableArchives(QDir(tempDir.path()), true, {});
 
   ASSERT_EQ(archives.size(), 2);
   EXPECT_EQ(archives.at(0).fileName(), "foo.ba2");
@@ -68,7 +68,7 @@ TEST(ArchiveHandlerDispatch, AddsDelegatedArchivesWhenFeatureSupportsThem)
 
   auto handler =
       std::make_shared<FakeArchiveHandler>(QStringList({"arena.bsa", "textures.rsc"}));
-  const auto archives = findExtractableArchives(QDir(tempDir.path()), handler);
+  const auto archives = findExtractableArchives(QDir(tempDir.path()), true, handler);
 
   ASSERT_EQ(archives.size(), 2);
   EXPECT_EQ(archives.at(0).fileName(), "arena.bsa");
@@ -83,3 +83,4 @@ TEST(ArchiveHandlerDispatch, DelegatesOnlyWhenFeatureClaimsArchiveSupport)
   EXPECT_FALSE(shouldDelegateArchive("D:/mods/skyrim.ba2", handler));
   EXPECT_FALSE(shouldDelegateArchive("D:/mods/skyrim.ba2", {}));
 }
+
