@@ -3,7 +3,13 @@
 
 #include <QProgressDialog>
 
+#include <memory>
+#include <string>
+
+#include <QFileInfo>
+
 #include <uibase/iplugin.h>
+#include <uibase/game_features/gamearchivehandler.h>
 
 class BsaExtractor : public QObject, public MOBase::IPlugin
 {
@@ -25,10 +31,16 @@ public:
   virtual QList<MOBase::PluginSetting> settings() const override;
 
 private:
+  void tryRegisterInstallHook();
   void modInstalledHandler(MOBase::IModInterface *mod);
   bool extractProgress(QProgressDialog &progress, int percentage, std::string fileName);
+  bool extractWithBsaTk(MOBase::IModInterface* mod, const QFileInfo& archiveInfo);
+  bool extractWithGameHandler(
+      MOBase::IModInterface* mod, const QFileInfo& archiveInfo,
+      const std::shared_ptr<const MOBase::GameArchiveHandler>& archiveHandler);
 private:
   MOBase::IOrganizer *m_Organizer;
+  bool m_InstallHookRegistered = false;
 };
 
 #endif // BSAEXTRACTOR_H

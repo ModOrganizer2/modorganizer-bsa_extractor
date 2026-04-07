@@ -1,8 +1,10 @@
 {
   "dependencies": [
     "mo2-dds-header",
+    "mo2-bsatk",
     "boost-thread",
     "boost-interprocess",
+    "gtest",
     "zlib",
     "lz4"
   ],

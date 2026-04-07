@@ -3,3 +3,7 @@ CMakeLists.txt.user
 /msbuild.log
 /*std*.log
 /*build
+/build-local
+/_deploy
+/_deploy_bt
+/vsbuild_bt
