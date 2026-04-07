@@ -83,4 +83,3 @@ TEST(ArchiveHandlerDispatch, DelegatesOnlyWhenFeatureClaimsArchiveSupport)
   EXPECT_FALSE(shouldDelegateArchive("D:/mods/skyrim.ba2", handler));
   EXPECT_FALSE(shouldDelegateArchive("D:/mods/skyrim.ba2", {}));
 }
-
