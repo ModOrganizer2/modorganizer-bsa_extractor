@@ -5,13 +5,10 @@
 
 #include <uibase/iplugin.h>
 
-class BsaExtractor : public QObject, public MOBase::IPlugin
-{
+class BsaExtractor : public QObject, public MOBase::IPlugin {
   Q_OBJECT
   Q_INTERFACES(MOBase::IPlugin)
-#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
   Q_PLUGIN_METADATA(IID "org.tannin.BSAExtractor")
-#endif
 
 public:
   BsaExtractor();
@@ -26,7 +23,9 @@ public:
 
 private:
   void modInstalledHandler(MOBase::IModInterface *mod);
-  bool extractProgress(QProgressDialog &progress, int percentage, std::string fileName);
+  bool extractProgress(QProgressDialog &progress, int percentage,
+                       std::string fileName);
+
 private:
   MOBase::IOrganizer *m_Organizer;
 };
