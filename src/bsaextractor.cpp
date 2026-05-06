@@ -93,8 +93,8 @@ void BsaExtractor::modInstalledHandler(IModInterface *mod) {
              QDialogButtonBox::No) == QDialogButtonBox::Yes);
     foreach (QFileInfo archiveInfo, archives) {
       BSA::Archive archive;
-      BSA::EErrorCode result =
-          archive.read(archiveInfo.absoluteFilePath().toStdWString().c_str(), true);
+      BSA::EErrorCode result = archive.read(
+          archiveInfo.absoluteFilePath().toStdWString().c_str(), true);
       if ((result != BSA::ERROR_NONE) && (result != BSA::ERROR_INVALIDHASHES)) {
         reportError(tr("failed to read %1: %2")
                         .arg(archiveInfo.fileName())
